@@ -117,13 +117,25 @@ def retrieve_donors_with_blood_group(blood_group):
 @app.route('/donors/delete/<donor_id>', methods=['DELETE'])
 def delete_donor(donor_id):
     try:
+        # Blood Transfusion and also Blood Test
         # Connect to the database
         connection = mysql.connect
         cursor = connection.cursor()
-
         # Delete the specified donor from the database
+        query0 = "DELETE FROM BloodTransfusion where blood_bag_id = %s"
+        query = "DELETE FROM BloodTest where blood_bag_id = %s"
+        query2 = "SELECT ID FROM BloodBag where donor_id = %s"
+        cursor.execute(query2,(donor_id))
+        results = cursor.fetchall()
+        for result in results:
+            cursor.execute(query0,str(result.get('ID')))
+            cursor.execute(query,str(result.get('ID')))
+            query = "DELETE FROM BloodBag where donor_id = %s"
+            cursor.execute(query,(donor_id))
+            print(3)
         query = "DELETE FROM Donor WHERE ID = %s"
-        cursor.execute(query, (donor_id,))
+        cursor.execute(query, (donor_id))
+        print(4)
         connection.commit()
 
         # Close the database connection and return a success message
@@ -133,6 +145,7 @@ def delete_donor(donor_id):
 
     except Exception as e:
         # Handle any errors that occur during the database operation
+        
         return jsonify({'error': str(e)})
 
 @app.route('/donors/near-expiry/<number_of_days>', methods=['GET'])
