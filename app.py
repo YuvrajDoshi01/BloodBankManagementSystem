@@ -59,7 +59,7 @@ def donation():
         return render_template('form.html')
 
 # 3) Retrieve the list of all donors with their donation history
-
+# If donation history is none, blood_group along with the expiry_date and the donation_date and the volume is set to none
 @app.route('/donors', methods=['GET'])
 def retrieve_donors_with_donation_history():
     cur = mysql.connection.cursor()
@@ -70,21 +70,34 @@ def retrieve_donors_with_donation_history():
                    ORDER BY Donor.ID;''')
     result = cur.fetchall()
     cur.close()
-    return jsonify(result)
+    return render_template('donor_details.html',donors = result)
 
 # 4) Adding a new donor to the database
-@app.route('/donor', methods=['POST'])
+@app.route('/donor', methods=['POST','GET'])
 def add_donor():
-    name = request.json['name']
-    phone = request.json['phone']
-    email = request.json['email']
-    cur = mysql.connection.cursor()
-    cur.execute('''INSERT INTO Donor (name, phone, email)
-                   VALUES (%s, %s, %s)''',
-                (name, phone, email))
-    mysql.connection.commit()
-    cur.close()
-    return jsonify({'message': 'Donor added successfully!'})
+    if request.method == 'POST':    
+        name = request.json['name']
+        phone = request.json['phone']
+        email = request.json['email']
+        
+        cur = mysql.connection.cursor()
+        cur.execute('''INSERT INTO Donor (name, phone, email)
+                    VALUES (%s, %s, %s)''',
+                    (name, phone, email))
+        donor_id = cur.lastrowid
+
+        street = request.json['street']
+        city = request.json['city']
+        state = request.json['state']
+        zip_code = request.json['zip_code']
+        cur.execute("INSERT INTO ADDRESS (street, city, state, zip_code) VALUES (%s, %s, %s, %s)", (street, city, state, zip_code))
+        address_id = cur.lastrowid
+
+        mysql.connection.commit()
+        cur.close()
+        return redirect('/donors')
+    else :
+        return render_template('add_donor.html')
 
 # 5) Update the information of the donor
 @app.route('/donor/<int:donor_id>', methods=['PUT'])

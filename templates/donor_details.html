@@ -1,29 +1,45 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Donor Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style2.css') }}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  </head>
+  <body>
+    <div class="container">
+      <h1>Donor Details</h1>
+      <table id="donors-table" class="table table-striped table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Blood Type</th>
+            <th>Donation Date</th>
+            <th>Expiry Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for donor in donors %}
+          <tr>
+            <td>{{ donor['ID'] }}</td>
+            <td>{{ donor['name'] }}</td>
+            <td>{{ donor['phone'] }}</td>
+            <td>{{ donor['email'] }}</td>
+            <td>{{ donor['blood_type'] }}</td>
+            <td>{{ donor['donation_date'] }}</td>
+            <td>{{ donor['expiry_date'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
 
-{% block title %}Donor Details{% endblock %}
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="{{ url_for('static', filename='script2.js') }}"></script>
+  </body>
+</html>
 
-{% block content %}
-  <h1>Donor Details</h1>
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Phone</th>
-        <th>Email</th>
-        <th>Address</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for donor in donors %}
-        <tr>
-          <td>{{ donor.ID }}</td>
-          <td>{{ donor.name }}</td>
-          <td>{{ donor.phone }}</td>
-          <td>{{ donor.email }}</td>
-          <td>{{ donor.address.street }}, {{ donor.address.city }}, {{ donor.address.state }}, {{ donor.address.zip_code }}</td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-{% endblock %}

@@ -1,0 +1,31 @@
+table {
+    margin-top: 1rem;
+  }
+  
+  table th,
+  table td {
+    vertical-align: middle;
+  }
+  
+  .table-responsive {
+    margin-top: 1rem;
+  }
+  
+  .loading-spinner {
+    display: inline-block;
+    margin-top: 1rem;
+    margin-right: 0.5rem;
+    border-radius: 50%;
+    border: 0.25rem solid rgba(0, 0, 0, 0.1);
+    border-top-color: #007bff;
+    width: 1.5rem;
+    height: 1.5rem;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
