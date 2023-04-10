@@ -100,18 +100,30 @@ def add_donor():
         return render_template('add_donor.html')
 
 # 5) Update the information of the donor
-@app.route('/donor/<int:donor_id>', methods=['PUT'])
+@app.route('/donor/<int:donor_id>', methods=['GET','POST'])
 def update_donor_information(donor_id):
-    name = request.json['name']
-    phone = request.json['phone']
-    email = request.json['email']
-    cur = mysql.connection.cursor()
-    cur.execute('''UPDATE Donor SET name = %s, phone = %s, email = %s
-                   WHERE ID = %s''',
-                (name, phone, email, donor_id))
-    mysql.connection.commit()
-    cur.close()
-    return jsonify({'message': 'Donor information updated successfully!'})
+    if request.method == 'POST':
+        name = request.json['name']
+        phone = request.json['phone']
+        email = request.json['email']
+        cur = mysql.connection.cursor()
+        cur.execute('''UPDATE Donor SET name = %s, phone = %s, email = %s
+                    WHERE ID = %s''',
+                    (name, phone, email, donor_id))
+        
+        street = request.json['street']
+        city = request.json['city']
+        state = request.json['state']
+        zip_code = request.json['zip_code']
+
+        cur.execute('''UPDATE ADDRESS SET street = %s,city=%s,state=%s,zip_code= %s 
+                    WHERE ID = %s ''', (street,city,state,zip_code,donor_id))
+        mysql.connection.commit()
+        cur.close()
+        return redirect('/donors')
+    else:
+        return render_template('donor_edit.html',donor_id = donor_id)
+
 
 @app.route('/donors/blood_group/<blood_group>',methods=['GET'])
 def retrieve_donors_with_blood_group(blood_group):

@@ -1,24 +1,39 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Donor Information Editor</title>
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style4.css') }}">
+</head>
+<body>
+	<h1>Edit Donor Information</h1>
+	<form id="donor-form">
 
-{% block content %}
-  <h1>Edit Donor Information</h1>
-  <form method="POST" action="{{ url_for('update_donor', donor_id=donor.id) }}">
-    <div class="form-group">
-      <label for="name">Name:</label>
-      <input type="text" class="form-control" id="name" name="name" value="{{ donor.name }}" required>
-    </div>
-    <div class="form-group">
-      <label for="phone">Phone:</label>
-      <input type="tel" class="form-control" id="phone" name="phone" value="{{ donor.phone }}" required>
-    </div>
-    <div class="form-group">
-      <label for="email">Email:</label>
-      <input type="email" class="form-control" id="email" name="email" value="{{ donor.email }}" required>
-    </div>
-    <div class="form-group">
-      <label for="address">Address:</label>
-      <input type="text" class="form-control" id="address" name="address" value="{{ donor.address }}" required>
-    </div>
-    <button type="submit" class="btn btn-primary">Update Donor</button>
-  </form>
-{% endblock %}
+    <input type="hidden" id="donor_id" name="donor_id" value="{{donor_id}}">
+
+		<label for="name">Name:</label>
+		<input type="text" id="name" name="name"><br>
+
+		<label for="phone">Phone:</label>
+		<input type="text" id="phone" name="phone"><br>
+
+		<label for="email">Email:</label>
+		<input type="text" id="email" name="email"><br>
+
+    <label for="street">Street:</label>
+		<input type="text" id="street" name="street"><br>
+
+    <label for="city">City:</label>
+		<input type="text" id="city" name="city"><br>
+
+    <label for="state">State:</label>
+		<input type="text" id="state" name="state"><br>
+
+    <label for="zip_code">ZipCode:</label>
+		<input type="text" id="zip_code" name="zip_code"><br>
+
+		<input type="submit" value="Update">
+	</form>
+
+	<script type="text/javascript" src="{{ url_for('static', filename='script4.js') }}"></script>
+</body>
+</html>
