@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>Edit Donor Information</h1>
+  <form method="POST" action="{{ url_for('update_donor', donor_id=donor.id) }}">
+    <div class="form-group">
+      <label for="name">Name:</label>
+      <input type="text" class="form-control" id="name" name="name" value="{{ donor.name }}" required>
+    </div>
+    <div class="form-group">
+      <label for="phone">Phone:</label>
+      <input type="tel" class="form-control" id="phone" name="phone" value="{{ donor.phone }}" required>
+    </div>
+    <div class="form-group">
+      <label for="email">Email:</label>
+      <input type="email" class="form-control" id="email" name="email" value="{{ donor.email }}" required>
+    </div>
+    <div class="form-group">
+      <label for="address">Address:</label>
+      <input type="text" class="form-control" id="address" name="address" value="{{ donor.address }}" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Update Donor</button>
+  </form>
+{% endblock %}

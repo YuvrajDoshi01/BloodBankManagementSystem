@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request,render_template,redirect
 from flask_mysqldb import MySQL
 
 app = Flask(__name__)
@@ -20,26 +20,46 @@ def retrieve_blood_units():
                    GROUP BY blood_type;''')
     result = cur.fetchall()
     cur.close()
-    return jsonify(result)
+    return render_template('blood_units.html', data=result)
 
 # 2) Update the inventory after a new donation
-@app.route('/donation', methods=['POST'])
-def update_inventory():
-    blood_type = request.json['blood_type']
-    volume = request.json['volume']
-    expiry_date = request.json['expiry_date']
-    donation_date = request.json['donation_date']
-    donor_id = request.json['donor_id']
-    blood_bank_id = request.json['blood_bank_id']
-    cur = mysql.connection.cursor()
-    cur.execute('''INSERT INTO BloodBag (blood_type, volume, expiry_date, donation_date, donor_id, blood_bank_id)
-                   VALUES (%s, %s, %s, %s, %s, %s)''',
-                (blood_type, volume, expiry_date, donation_date, donor_id, blood_bank_id))
-    mysql.connection.commit()
-    cur.close()
-    return jsonify({'message': 'Inventory updated successfully!'})
+@app.route('/donation', methods=['GET','POST'])
+def donation():
+    if request.method == 'POST':
+
+        donor_data = request.json
+        name = donor_data['name']
+        phone = donor_data['phone']
+        email = donor_data['email']
+        street = donor_data['street']
+        city = donor_data['city']
+        state = donor_data['state']
+        zip_code = donor_data['zip_code']
+        blood_type = donor_data['blood_type']
+        volume = donor_data['volume']
+        expiry_date = donor_data['expiry_date']
+        donation_date = donor_data['donation_date']
+        
+        # Insert donor information into donor table
+        cursor = mysql.connection.cursor()
+        cursor.execute("INSERT INTO donor (name, phone, email) VALUES (%s, %s, %s)", (name, phone, email))
+        donor_id = cursor.lastrowid
+        
+        # Insert address information into address table
+        cursor.execute("INSERT INTO address (street, city, state, zip_code) VALUES (%s, %s, %s, %s)", (street, city, state, zip_code))
+        address_id = cursor.lastrowid
+        
+        # Insert blood bag information into bloodbag table, using the donor_id and address_id values
+        cursor.execute("INSERT INTO bloodbag (blood_type, volume, expiry_date, donation_date, donor_id, blood_bank_id) VALUES (%s, %s, %s, %s, %s, %s)", (blood_type, volume, expiry_date, donation_date, donor_id, 1))
+        mysql.connection.commit()
+        
+        cursor.close()
+        return redirect('/blood_units')
+    else :
+        return render_template('form.html')
 
 # 3) Retrieve the list of all donors with their donation history
+
 @app.route('/donors', methods=['GET'])
 def retrieve_donors_with_donation_history():
     cur = mysql.connection.cursor()
@@ -80,7 +100,7 @@ def update_donor_information(donor_id):
     cur.close()
     return jsonify({'message': 'Donor information updated successfully!'})
 
-@app.route('/donors/blood_group/<blood_group>')
+@app.route('/donors/blood_group/<blood_group>',methods=['GET'])
 def retrieve_donors_with_blood_group(blood_group):
     try:
         # Connect to the database
