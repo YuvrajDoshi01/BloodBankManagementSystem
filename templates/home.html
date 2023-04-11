@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Bank</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="heading"><span>Blood</span>Bank</div>
+    <div class="navbar">
+        <a href="/donation">Donate <span>Blood</span></a>
+        <a href="/blood_units">Blood Units Availablity</a>
+        <a href="/donors">Donor List</a>
+        <a href="/donor">Add a donor</a>
+    </div>
+</body>
+
+</html>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        color: white;
+        font-family: 'Poppins';
+    }
+
+    body {
+        background-color: black;
+    }
+
+    .heading {
+        display: flex;
+        justify-content: center;
+        margin-top: 3rem;
+        font-size: 6rem;
+    }
+
+    .heading>span {
+        color: red;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        margin-top: 2rem;
+        font-size: 1.5rem;
+        border: 2px solid rgb(227, 226, 226);
+        border-radius: 12px;
+        width: 90%;
+        margin-inline: auto;
+    }
+
+    .navbar>a {
+        cursor: pointer;
+        padding: 1rem;
+        transition: all 0.2s ease;
+    }
+
+    .navbar>a:hover {
+        background-color: rgb(65, 64, 64);
+    }
+</style>

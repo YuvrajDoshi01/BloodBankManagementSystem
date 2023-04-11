@@ -133,6 +133,7 @@ def update_donor_information(donor_id):
         return redirect('/donors')
     else:
         return render_template('donor_edit.html',donor_id = donor_id)
+    
 
 
 @app.route('/donors/blood_group/<blood_group>',methods=['GET'])
@@ -237,3 +238,7 @@ def retrieve_donors_with_near_expiry(number_of_days):
     except Exception as e:
         # Handle any errors that occur during the database operation
         return jsonify({'error': str(e)})
+
+@app.route('/',methods = ['GET'])
+def homepage():
+    return render_template('home.html')
