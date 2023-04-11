@@ -3,8 +3,6 @@ CREATE TABLE Donor (
   name varchar(255),
   phone varchar(20),
   email varchar(255),
-  address_id int,
-  FOREIGN KEY (address_id) REFERENCES Address(ID) ON DELETE SET NULL
 );
 
 CREATE TABLE Address (
@@ -49,8 +47,6 @@ CREATE TABLE Recipient (
   name varchar(255),
   phone varchar(20),
   email varchar(255),
-  address_id int,
-  FOREIGN KEY (address_id) REFERENCES Address(ID) ON DELETE SET NULL
 );
 
 CREATE TABLE BloodTransfusion (
