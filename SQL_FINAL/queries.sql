@@ -45,12 +45,10 @@ WHERE b.blood_type = 'AB+';
 -- Delete the information of a specific donor
 DELETE Donor, Address, BloodBag, BloodTest
 FROM Donor
-LEFT JOIN Address ON Donor.address_id = Address.ID
+LEFT JOIN Address ON Donor.ID= Address.ID
 LEFT JOIN BloodBag ON Donor.ID = BloodBag.donor_id
 LEFT JOIN BloodTest ON BloodBag.ID = BloodTest.blood_bag_id
 WHERE Donor.ID = 1;
-
-
 
 -- Retrieve the list of blood Units that are about to expire in the next 30 days
 SELECT b.ID, b.blood_type, b.volume, b.expiry_date, bb.name AS blood_bank_name
