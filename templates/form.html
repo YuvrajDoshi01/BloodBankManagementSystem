@@ -9,34 +9,66 @@
     <div class="container">
         <h1>Blood Donation Form</h1>
         <form method="post" action="{{ url_for('donation') }}">
+            
+            <div class="form-group">
+                <label for="donor_id">DonorID</label>
+                <input type="text" name="donor_id" id="donor_id" placeholder="Enter DonorID" required>
+            </div>
+            
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" name="name" id="name" placeholder="Enter Name" required>
             </div>
+            
             <div class="form-group">
                 <label for="phone">Phone</label>
                 <input type="text" name="phone" id="phone" placeholder="Enter Phone Number" required>
             </div>
+            
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="text" name="email" id="email" placeholder="Enter Email" required>
             </div>
+            
             <div class="form-group">
                 <label for="street">Street</label>
                 <input type="text" name="street" id="street" placeholder="Enter Street Address" required>
             </div>
+            
             <div class="form-group">
                 <label for="city">City</label>
                 <input type="text" name="city" id="city" placeholder="Enter City" required>
             </div>
+            
             <div class="form-group">
                 <label for="state">State</label>
                 <input type="text" name="state" id="state" placeholder="Enter State" required>
             </div>
+            
             <div class="form-group">
                 <label for="zip_code">Zip Code</label>
                 <input type="text" name="zip_code" id="zip_code" placeholder="Enter Zip Code" required>
             </div>
+             
+            <div class="form-group">
+                <label for="blood_type">BloodType</label>
+                <input type="text" name="blood_type" id="blood_type" placeholder="Enter BLOOD_TYPE" required>
+            </div>
+
+            <div class="form-group">
+                <label for="volume">Volume</label>
+                <input type="text" name="volume" id="volume" placeholder="Enter Volume to be Donated" required>
+            </div>
+
+            <div class="form-group">
+                <label for="donation_date">DonationDate</label>
+                <input type="text" name="donation_date" id="donation_date" placeholder="Enter DonationDate in ISO form" required>
+            </div>
+            <div class="form-group">
+                <label for="expiry_date">ExpiryDate</label>
+                <input type="text" name="expiry_date" id="expiry_date" placeholder="Enter ExpiryDate in ISO form" required>
+            </div>
+
             <button type="submit">Donate</button>
         </form>
     </div>

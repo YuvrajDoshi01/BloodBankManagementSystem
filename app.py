@@ -39,12 +39,21 @@ def donation():
         volume = donor_data['volume']
         expiry_date = donor_data['expiry_date']
         donation_date = donor_data['donation_date']
+        donor_id = donor_data.get('donor_id')
         
-        # Insert donor information into donor table
+        # Check if the donor exists in the donor table
         cursor = mysql.connection.cursor()
-        cursor.execute("INSERT INTO donor (name, phone, email) VALUES (%s, %s, %s)", (name, phone, email))
-        donor_id = cursor.lastrowid
+        cursor.execute("SELECT * FROM donor WHERE ID=%s", (donor_id,))
+        donor = cursor.fetchone()
         
+        if donor is None:
+            # Donor does not exist, create new donor
+            cursor.execute("INSERT INTO donor (name, phone, email) VALUES (%s, %s, %s)", (name, phone, email))
+            donor_id = cursor.lastrowid
+        else:
+            # Donor exists, update volume in bloodbag table
+            cursor.execute("UPDATE bloodbag SET volume=volume+%s WHERE donor_id=%s", (volume, donor_id,))
+
         # Insert address information into address table
         cursor.execute("INSERT INTO address (street, city, state, zip_code) VALUES (%s, %s, %s, %s)", (street, city, state, zip_code))
         address_id = cursor.lastrowid

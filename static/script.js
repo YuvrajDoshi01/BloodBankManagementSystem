@@ -10,7 +10,6 @@ form.addEventListener('submit', (event) => {
   const formData = new FormData(form);
   
   // Convert the form data to a JSON object
-  console.log("1");
   const json = JSON.stringify(Object.fromEntries(formData.entries()));
   console.log(json);
   // Send the form data to the server using a fetch request
