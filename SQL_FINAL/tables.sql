@@ -2,7 +2,9 @@ CREATE TABLE Donor (
   ID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name varchar(255),
   phone varchar(20),
-  email varchar(255)
+  email varchar(255),
+  address_id int,
+  FOREIGN KEY (address_id) REFERENCES Address(ID) ON DELETE SET NULL
 );
 
 CREATE TABLE Address (
@@ -18,7 +20,7 @@ CREATE TABLE BloodBank (
   name varchar(255),
   license_number varchar(255),
   address_id int,
-  FOREIGN KEY (address_id) REFERENCES Address(ID)
+  FOREIGN KEY (address_id) REFERENCES Address(ID) ON DELETE SET NULL
 );
 
 CREATE TABLE BloodBag (
@@ -29,8 +31,8 @@ CREATE TABLE BloodBag (
   donation_date date,
   donor_id int,
   blood_bank_id int,
-  FOREIGN KEY (donor_id) REFERENCES Donor(ID),
-  FOREIGN KEY (blood_bank_id) REFERENCES BloodBank(ID)
+  FOREIGN KEY (donor_id) REFERENCES Donor(ID) ON DELETE SET NULL,
+  FOREIGN KEY (blood_bank_id) REFERENCES BloodBank(ID) ON DELETE SET NULL
 );
 
 CREATE TABLE BloodTest (
@@ -39,7 +41,7 @@ CREATE TABLE BloodTest (
   test_date date,
   test_result varchar(255),
   blood_bag_id int,
-  FOREIGN KEY (blood_bag_id) REFERENCES BloodBag(ID)
+  FOREIGN KEY (blood_bag_id) REFERENCES BloodBag(ID) ON DELETE CASCADE
 );
 
 CREATE TABLE Recipient (
@@ -48,7 +50,7 @@ CREATE TABLE Recipient (
   phone varchar(20),
   email varchar(255),
   address_id int,
-  FOREIGN KEY (address_id) REFERENCES Address(ID)
+  FOREIGN KEY (address_id) REFERENCES Address(ID) ON DELETE SET NULL
 );
 
 CREATE TABLE BloodTransfusion (
@@ -56,7 +58,6 @@ CREATE TABLE BloodTransfusion (
   transfusion_date date,
   recipient_id int,
   blood_bag_id int,
-  FOREIGN KEY (recipient_id) REFERENCES Recipient(ID),
-  FOREIGN KEY (blood_bag_id) REFERENCES BloodBag(ID)
+  FOREIGN KEY (recipient_id) REFERENCES Recipient(ID) ON DELETE SET NULL,
+  FOREIGN KEY (blood_bag_id) REFERENCES BloodBag(ID) ON DELETE SET NULL
 );
-

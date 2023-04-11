@@ -6,7 +6,7 @@ app = Flask(__name__)
 # MySQL configurations
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = '8875093192'
-app.config['MYSQL_DB'] = 'blood_bank2'
+app.config['MYSQL_DB'] = 'blood_bank'
 app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 mysql = MySQL(app)
 
@@ -49,16 +49,17 @@ def donation():
         if donor is None:
             # Donor does not exist, create new donor
             cursor.execute("INSERT INTO donor (name, phone, email) VALUES (%s, %s, %s)", (name, phone, email))
+            cursor.execute("INSERT INTO address (street, city, state, zip_code) VALUES (%s, %s, %s, %s)", (street, city, state, zip_code))
             donor_id = cursor.lastrowid
+            # cursor.execute("INSERT INTO bloodbag (blood_type, volume, expiry_date, donation_date, donor_id, blood_bank_id) VALUES (%s, %s, %s, %s, %s, %s)", (blood_type, volume, expiry_date, donation_date, donor_id, 1))
+            # mysql.connection.commit()
+        
         else:
             # Donor exists, update volume in bloodbag table
             cursor.execute("UPDATE bloodbag SET volume=volume+%s WHERE donor_id=%s", (volume, donor_id,))
 
-        # Insert address information into address table
-        cursor.execute("INSERT INTO address (street, city, state, zip_code) VALUES (%s, %s, %s, %s)", (street, city, state, zip_code))
-        address_id = cursor.lastrowid
-        
-        # Insert blood bag information into bloodbag table, using the donor_id and address_id values
+        print(2)
+        # Insert blood bag information into bloodbag table, using the donor_id
         cursor.execute("INSERT INTO bloodbag (blood_type, volume, expiry_date, donation_date, donor_id, blood_bank_id) VALUES (%s, %s, %s, %s, %s, %s)", (blood_type, volume, expiry_date, donation_date, donor_id, 1))
         mysql.connection.commit()
         
@@ -150,7 +151,7 @@ def retrieve_donors_with_blood_group(blood_group):
         for row in result:
             print(row)
             donor = {
-                'id': row.get('id'),
+                'id': row.get('ID'),
                 'name': row.get('name'),
                 'phone': row.get('phone'),
                 'email': row.get('email'),
@@ -161,20 +162,21 @@ def retrieve_donors_with_blood_group(blood_group):
         # Close the database connection and return the list of donors
         cursor.close()
         connect.close()
-        return jsonify(donors)
+        return render_template('donor_retrieve.html',donors = donors,blood_group= blood_group)
 
     except Exception as e:
         # Handle any errors that occur during the database operation
         print(e)
         return jsonify({'error': str(e)})
     
-@app.route('/donors/delete/<donor_id>', methods=['DELETE'])
+@app.route('/donors/delete/<donor_id>', methods=['DELETE','GET'])
 def delete_donor(donor_id):
-    try:
+    if request.method == 'DELETE':
         # Blood Transfusion and also Blood Test
         # Connect to the database
         connection = mysql.connect
         cursor = connection.cursor()
+
         # Delete the specified donor from the database
         query0 = "DELETE FROM BloodTransfusion where blood_bag_id = %s"
         query = "DELETE FROM BloodTest where blood_bag_id = %s"
@@ -188,6 +190,7 @@ def delete_donor(donor_id):
             cursor.execute(query,(donor_id))
             print(3)
         query = "DELETE FROM Donor WHERE ID = %s"
+        cursor.execute(query, (donor_id,))
         cursor.execute(query, (donor_id))
         print(4)
         connection.commit()
@@ -195,12 +198,12 @@ def delete_donor(donor_id):
         # Close the database connection and return a success message
         cursor.close()
         connection.close()
-        return jsonify({'message': 'Donor deleted successfully'})
+        return render_template('delete_donor.html')
 
-    except Exception as e:
+    else:
         # Handle any errors that occur during the database operation
         
-        return jsonify({'error': str(e)})
+        return render_template('delete_donor.html',donor_id= donor_id)
 
 @app.route('/donors/near-expiry/<number_of_days>', methods=['GET'])
 def retrieve_donors_with_near_expiry(number_of_days):
@@ -218,7 +221,7 @@ def retrieve_donors_with_near_expiry(number_of_days):
         donors = []
         for row in results:
             donor = {
-                'id': row.get('id'),
+                'id': row.get('ID'),
                 'name': row.get('name'),
                 'phone': row.get('phone'),
                 'email': row.get('email'),
@@ -229,7 +232,7 @@ def retrieve_donors_with_near_expiry(number_of_days):
         # Close the database connection and return the list of donors as a JSON object
         cursor.close()
         connection.close()
-        return jsonify(donors)
+        return render_template('near_expiry.html', donors= donors,number_of_days = number_of_days)
 
     except Exception as e:
         # Handle any errors that occur during the database operation

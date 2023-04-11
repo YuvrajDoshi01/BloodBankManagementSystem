@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Donors With Near Expiry Blood</title>
+</head>
+<body>
+	<h1>Donors With Near Expiry Blood</h1>
+    <link rel="stylesheet" href="{{ url_for('static', filename='near_expiry.css') }}">
+	<p>The following donors have blood that is about to expire in {{ number_of_days }} days:</p>
+
+	{% if donors %}
+		<table>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Phone</th>
+				<th>Email</th>
+				<th>Expiry Date</th>
+			</tr>
+			{% for donor in donors %}
+			<tr>
+				<td>{{ donor.id }}</td>
+				<td>{{ donor.name }}</td>
+				<td>{{ donor.phone }}</td>
+				<td>{{ donor.email }}</td>
+				<td>{{ donor.expiry_date }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+	{% else %}
+		<p>No donors found.</p>
+	{% endif %}
+</body>
+</html>
+

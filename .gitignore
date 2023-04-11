@@ -1,0 +1,14 @@
+# Exclude log files
+*.log
+
+# Exclude temporary files
+*.tmp
+
+# Exclude configuration files
+config.ini
+
+# Exclude venv directory
+venv/
+
+#Exclude other files
+__pycache__/

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Donor Details</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='retrieve_donor.css') }}">
+</head>
+
+<body>
+  <h1>Donors with Blood Group {{ blood_group }}</h1>
+  <table id="donor-table">
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Phone</th>
+      <th>Email</th>
+    </tr>
+    {% for donor in donors %}
+    <tr>
+      <td>{{ donor.id }}</td>
+      <td>{{ donor.name }}</td>
+      <td>{{ donor.phone }}</td>
+      <td>{{ donor.email }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+  <script src="{{ url_for('static', filename='retrieve_donor.js') }}"></script>
+</body>
+
+</html>
