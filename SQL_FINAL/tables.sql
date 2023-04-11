@@ -1,8 +1,14 @@
+-- Creating the database
+DROP DATABASE blood_bank;
+CREATE DATABASE blood_bank;
+use blood_bank;
+
+-- Creating the tables
 CREATE TABLE Donor (
   ID int NOT NULL AUTO_INCREMENT PRIMARY KEY,
   name varchar(255),
   phone varchar(20),
-  email varchar(255),
+  email varchar(255)
 );
 
 CREATE TABLE Address (
@@ -47,6 +53,8 @@ CREATE TABLE Recipient (
   name varchar(255),
   phone varchar(20),
   email varchar(255),
+  address_id int,
+  FOREIGN KEY (address_id) REFERENCES Address(ID) ON DELETE SET NULL
 );
 
 CREATE TABLE BloodTransfusion (
