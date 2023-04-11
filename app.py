@@ -178,20 +178,20 @@ def delete_donor(donor_id):
         cursor = connection.cursor()
 
         # Delete the specified donor from the database
-        query0 = "DELETE FROM BloodTransfusion where blood_bag_id = %s"
-        query = "DELETE FROM BloodTest where blood_bag_id = %s"
-        query2 = "SELECT ID FROM BloodBag where donor_id = %s"
-        cursor.execute(query2,(donor_id))
+        query2 = f"SELECT ID FROM BloodBag where donor_id = {donor_id}"
+        cursor.execute(query2)
+        print(1)
         results = cursor.fetchall()
+        print(results)
         for result in results:
-            cursor.execute(query0,str(result.get('ID')))
-            cursor.execute(query,str(result.get('ID')))
-            query = "DELETE FROM BloodBag where donor_id = %s"
-            cursor.execute(query,(donor_id))
+            print(result)
+            ID = str(result.get('ID'))
+            query0 = f"DELETE FROM BloodTransfusion where blood_bag_id = {ID}"
+            query = f"DELETE FROM BloodTest where blood_bag_id = {ID}"
+            query = f"DELETE FROM BloodBag where donor_id = {donor_id}"
             print(3)
-        query = "DELETE FROM Donor WHERE ID = %s"
-        cursor.execute(query, (donor_id,))
-        cursor.execute(query, (donor_id))
+        query = f"DELETE FROM Donor WHERE ID = {donor_id}"
+        cursor.execute(query)
         print(4)
         connection.commit()
 
